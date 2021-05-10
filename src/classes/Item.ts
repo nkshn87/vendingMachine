@@ -8,11 +8,11 @@ export class Item {
         this.price = price;
     }
 
-    public getName() {
+    public getName(): string {
         return this.name;
     }
 
-    public getPrice() {
+    public getPrice(): number {
         return this.price;
     }
 

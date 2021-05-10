@@ -1,5 +1,5 @@
 // お金管理装置
-class Casher {
+class CashManage {
 
     private deposit: number;
     private mode: 'nomal'|'free';
@@ -10,12 +10,9 @@ class Casher {
     }
 
     // 投入金額を格納
-    // public addDeposit(payment: number): void { this.deposit += payment; }
-    public addDeposit(payment: number): void {
-        this.deposit += payment;
-    }
+    public addDeposit(payment: number): void { this.deposit += payment; };
 
-    // 支払い実行
+    // 支払い実行 モードを返却
     public pay(price: number): string {
         this.swichMode();
 
@@ -31,15 +28,15 @@ class Casher {
     }
 
     // お釣りの払い出し
-    public payoutChange():number {
+    public payoutChange(): number {
         const change = this.deposit;
         this.deposit = 0;
         return change;
     }
 
     // 購入可能か判定
-    public checkCanBuyAnother(num: number): boolean {
-        return num <= this.deposit;
+    public isBuyableState(deposit: number): boolean {
+        return deposit <= this.deposit;
     }
 
     // 預かり金取得
@@ -48,11 +45,11 @@ class Casher {
     }
 
     // 一定確率でモードを切り替える
-    private swichMode():void {
+    private swichMode(): void {
         if (Math.floor(Math.random() * 10) === 1) {
             this.mode = 'free';
         };
     }
 }
 
-export = new Casher();
+export = new CashManage();
