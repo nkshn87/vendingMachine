@@ -15,4 +15,9 @@ utils.stdin = async (text: string): Promise<string> => {
         return inputText;
 }
 
+utils.randomNumFloor = (maxNum: number) => {
+    // 0~99: maxNum=100
+    return Math.floor(Math.random() * maxNum);
+}
+
 export  = utils;

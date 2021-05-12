@@ -2,70 +2,81 @@ import {Item} from './Item';
 
 // 在庫管理
 class StockManage {
-    private itemMap:Map<string, Item>;
-    private stockMap:Map<string, number>;
+    private itemMap:Map<string, Item>; // 商品名は一意
+    private stockMap:Map<Item, number>;
+    private minPrice: number;
 
     constructor() {
         this.itemMap = new Map();
         this.stockMap = new Map();
+        this.minPrice = 0;
     }
 
     // 商品の在庫を指定数追加
-    public addStock(item: Item, stockNum: number): void {
+    public addStock(name: string, price: number, stockNum: number): void { //TODO:最小金額
 
         // 入力値チェック
-        if (!stockNum || stockNum <= 0) throw `${item.getName()}の追加在庫数の値が不正です。: ${stockNum}`;
+        if (!stockNum || stockNum <= 0) throw `${name}の追加在庫数の値が不正です。: ${stockNum}`;
+
 
         // 存在しなければ新規作成
-        const stock = this.stockMap.get(item.getName());
-        if (!stock) {
-            this.itemMap.set(item.getName(), item);
-            this.stockMap.set(item.getName(), stockNum);
+        const item = this.itemMap.get(name);
+        if (!item) {
+            const inputItem = new Item(name, price);
+            this.itemMap.set(inputItem.getName(), inputItem);
+            this.stockMap.set(inputItem, stockNum);
+            if (this.minPrice === 0 || this.minPrice > inputItem.getPrice()) this.minPrice = inputItem.getPrice();
         } else {
             // あれば在庫追加
-            this.stockMap.set(item.getName(), stock + stockNum);
+            const stock = this.stockMap.get(item)
+            if (stock === undefined) {
+                this.stockMap.set(item, stockNum);
+            } else {
+                this.stockMap.set(item, stock + stockNum);
+            }
         }
     }
 
-    // 商品を１つ取り出し
-    public takeOutStock(itemName: string): void {
-        const item = this.itemMap.get(itemName);
-        if (item === undefined) throw `${itemName}の取り扱いはありません。`; // 取り扱いなし
-
-        const stock = this.stockMap.get(item.getName());
-        if (stock === undefined || stock === 0) throw `${item.getName()}は売り切れです。`;　// 在庫切れ
-
-        this.stockMap.set(item.getName(), stock - 1);
+    // 指定した商品を取得する
+    public getItem(name: string): Item {
+        const item = this.itemMap.get(name);
+        if (item === undefined) throw `${name}の取り扱いはありません。`;
+        return item;
     }
 
-    // 指定した商品の料金を取得
-    public getPrice(itemName: string): number {
-        return this.itemMap.get(itemName)?.getPrice() || 0;
+    // 商品を１つ取り出し
+    public decrementStockMap(item: Item): void {
+        const stock = this.stockMap.get(item);
+        if (stock === undefined || stock === 0) throw `${item.getName()}は売り切れです。`;
+
+        // 在庫ひとつ減らす
+        this.stockMap.set(item, stock - 1);
+
+        // 最小価格の更新
+        if (stock === 1 && this.minPrice === item.getPrice()) {
+            const prices: number[] = this.getItemsExistsStock().map(item => item.getPrice());
+            if (prices.length === 0) {
+                this.minPrice === 0;
+                return;
+            }
+            this.minPrice = prices.reduce((price1, price2) => Math.min(price1, price2));
+        }
     }
 
     // 在庫のある商品一覧を取得
-    public getItems(): Item[] {
+    public getItemsExistsStock(): Item[] {
         let itemListToString: Item[] = [];
-        let itemName: string, stockNum: number;
-        for ([itemName, stockNum] of this.stockMap.entries()) { // イテレータのためmap使えない
-            const item = this.itemMap.get(itemName);
+        let item: Item, stockNum: number;
+        for ([item, stockNum] of this.stockMap.entries()) { // イテレータのためmap使えない
             if (stockNum !== 0 && item !== undefined) itemListToString.push(item);
         }
         return itemListToString;
     }
 
-    // 最小価格の商品取得
+    // 商品の最小価格取得
     public getMinPrise(): number {
-        const items = this.itemMap.values();
-        let item = items.next();
-        let minPrice = item.value.price;
-        while (!item.done) {
-            if (minPrice > item.value.getPrice()) minPrice = item.value.getPrice();
-            item = items.next();
-        }
-        return minPrice;
+        return this.minPrice;
     }
-
 }
 
 export = new StockManage();
