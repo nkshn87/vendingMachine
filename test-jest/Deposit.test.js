@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Deposit_1 = __importDefault(require("../Deposit"));
-var Deposit_2 = __importDefault(require("../Deposit"));
+var Deposit_1 = __importDefault(require("../src/classes/Deposit"));
+var Deposit_2 = __importDefault(require("../src/classes/Deposit"));
 describe('Deposit', function () {
     beforeEach(function () {
         // シングルトンクラスのクラス変数の値をリセット

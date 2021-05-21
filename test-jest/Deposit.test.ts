@@ -1,5 +1,5 @@
-import Deposit from '../Deposit';
-import expectedDeposit from '../Deposit';
+import Deposit from '../src/classes/Deposit';
+import expectedDeposit from '../src/classes/Deposit';
 
 describe('Deposit', function () {
     beforeEach(() => {

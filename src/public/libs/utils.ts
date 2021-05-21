@@ -1,23 +1,25 @@
-const readline = require('readline-promise') // 標準出力
+import readline from 'readline'; // 標準入力
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
 
-const utils = module.exports;
+export class Utils {
+    static decomposition(text: string, format: string): Array<string> {
+        return (String(text)).split(format);
+    }
 
-utils.decomposition = (text: string, format: string): string[] => {
-    return (String(text)).split(format);
-}
-
-// 標準入力
-utils.stdin = async (text: string): Promise<string> => {
-        let inputText: string = '';
-        const rl = readline.default.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-        await rl.questionAsync(text).then((answer: string) => inputText = answer);
+    static async stdin(text: string): Promise<string> {
+        const answer = await this.question(text);
         rl.close();
-        return inputText;
-}
+        return answer;
+    }
 
-utils.randomNumFloor = (maxNum: number) => {
-    // 0~99: maxNum=100
-    return Math.floor(Math.random() * maxNum);
-}
+    private static question(text: string): Promise<string> {
+        return new Promise(resolve => {
+            rl.question(text, resolve);
+        });
+    }
 
-export  = utils;
+    static randomNumFloor(maxNum: number): number {
+        // 0~99: maxNum=100
+        return Math.floor(Math.random() * maxNum);
+    }
+}

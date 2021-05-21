@@ -6,11 +6,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var VendingMachine_1 = __importDefault(require("../VendingMachine"));
-var VendingMachine_2 = __importDefault(require("../VendingMachine"));
-var StockManage_1 = __importDefault(require("../StockManage")); //TODO:シングルトンなのでimportすれば、VendingMachineの中で使用しているStockManageを共有できる
-var CreateOutputText_1 = __importDefault(require("../CreateOutputText"));
-var Deposit_1 = __importDefault(require("../Deposit"));
+var VendingMachine_1 = __importDefault(require("../src/classes/VendingMachine"));
+var VendingMachine_2 = __importDefault(require("../src/classes/VendingMachine"));
+var StockManage_1 = __importDefault(require("../src/classes/StockManage")); //TODO:シングルトンなのでimportすれば、VendingMachineの中で使用しているStockManageを共有できる
+var CreateOutputText_1 = __importDefault(require("../src/classes/CreateOutputText"));
+var Deposit_1 = __importDefault(require("../src/classes/Deposit"));
 describe('VendingMachine', function () {
     beforeEach(function () {
         // シングルトンクラスのクラス変数の値をリセット
@@ -18,7 +18,7 @@ describe('VendingMachine', function () {
         StockManage_1.default['stockMap'].clear();
         StockManage_1.default['minPrice'] = 0;
         Deposit_1.default.payout();
-        CreateOutputText_1.default['textList'] = [];
+        CreateOutputText_1.default['outputTextList'] = [];
     });
     describe('constructor', function () {
         it('シングルトンクラスとしてインスタンスがexportされている', function () {
@@ -77,16 +77,16 @@ describe('VendingMachine', function () {
             var text = 'test1が買えました。現在の預かり金は50円です。\n\n毎度ありがとうございました。お釣り50円を返金します。';
             expect(console.log).toHaveBeenCalledWith(CreateOutputText_1.default.outputText(text));
         });
-        it('正常パターン（残金で追加購入可能）。在庫を一つ減らす：お釣り払い出しなし：メッセージをCreateOutputTextのtextListに格納：Trueを返却', function () {
+        it('正常パターン（残金で追加購入可能）。在庫を一つ減らす：お釣り払い出しなし：メッセージをCreateOutputTextのoutputTextListに格納：Trueを返却', function () {
             var ordertext = 'test1:500';
             StockManage_1.default.addStock('test1', 100, 2);
             expect(VendingMachine_1.default.buy(ordertext)).toBeTruthy();
             expect(StockManage_1.default['stockMap'].get(StockManage_1.default.getItem('test1'))).toBe(1);
             expect(Deposit_1.default.getDeposit()).toBe(400); // お釣り払い出しなし
             var expectList = ["test1\u304C\u8CB7\u3048\u307E\u3057\u305F\u3002\u73FE\u5728\u306E\u9810\u304B\u308A\u91D1\u306F400\u5186\u3067\u3059\u3002"];
-            expect(CreateOutputText_1.default['textList']).toEqual(expectList);
+            expect(CreateOutputText_1.default['outputTextList']).toEqual(expectList);
         });
-        it('在庫がないかつ残金で追加購入可能な場合。在庫変化なし：お釣り払い出しなし：メッセージをCreateOutputTextのtextListに格納：Trueを返却', function () {
+        it('在庫がないかつ残金で追加購入可能な場合。在庫変化なし：お釣り払い出しなし：メッセージをCreateOutputTextのoutputTextListに格納：Trueを返却', function () {
             var ordertext = 'test1:100';
             StockManage_1.default.addStock('test1', 100, 1);
             StockManage_1.default.decrementStockMap(StockManage_1.default.getItem('test1')); // 在庫を0に
@@ -94,9 +94,9 @@ describe('VendingMachine', function () {
             expect(StockManage_1.default['stockMap'].get(StockManage_1.default.getItem('test1'))).toBe(0); // 在庫変化なし
             expect(Deposit_1.default.getDeposit()).toBe(100); // お釣り払い出しなし
             var expectList = ["test1\u306F\u58F2\u308A\u5207\u308C\u3067\u3059\u3002\u73FE\u5728\u306E\u9810\u304B\u308A\u91D1\u306F100\u5186\u3067\u3059\u3002"];
-            expect(CreateOutputText_1.default['textList']).toEqual(expectList);
+            expect(CreateOutputText_1.default['outputTextList']).toEqual(expectList);
         });
-        it('投入金額が商品の価格を下回る場合、在庫変化なし：お釣り払い出し：メッセージをメッセージをCreateOutputTextのtextListに格納：Falseを返却', function () {
+        it('投入金額が商品の価格を下回る場合、在庫変化なし：お釣り払い出し：メッセージをメッセージをCreateOutputTextのoutputTextListに格納：Falseを返却', function () {
             var ordertext = 'test:50';
             StockManage_1.default.addStock('test', 100, 1);
             console.log = jest.fn();

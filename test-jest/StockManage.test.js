@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var StockManage_1 = __importDefault(require("../StockManage"));
-var Item_1 = require("../Item");
-var StockManage_2 = __importDefault(require("../StockManage"));
+var StockManage_1 = __importDefault(require("../src/classes/StockManage"));
+var Item_1 = require("../src/classes/Item");
+var StockManage_2 = __importDefault(require("../src/classes/StockManage"));
 describe('StockManage', function () {
     beforeEach(function () {
         // シングルトンクラスのクラス変数の値をリセット

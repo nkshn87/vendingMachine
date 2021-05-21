@@ -2,12 +2,12 @@
 //TODO:標準入力結果で処理が変わるメソッド
 //TODO:console.logされることのテスト
 
-import VendingMachine from '../VendingMachine';
-import {Item} from '../Item';
-import expectedVendingMachine from '../VendingMachine';
-import StockManage from '../StockManage'; //TODO:シングルトンなのでimportすれば、VendingMachineの中で使用しているStockManageを共有できる
-import CreateOutputText from '../CreateOutputText';
-import Deposit from '../Deposit';
+import VendingMachine from '../src/classes/VendingMachine';
+import {Item} from '../src/classes/Item';
+import expectedVendingMachine from '../src/classes/VendingMachine';
+import StockManage from '../src/classes/StockManage'; //TODO:シングルトンなのでimportすれば、VendingMachineの中で使用しているStockManageを共有できる
+import CreateOutputText from '../src/classes/CreateOutputText';
+import Deposit from '../src/classes/Deposit';
 
 describe('VendingMachine', function () {
 
@@ -17,7 +17,7 @@ describe('VendingMachine', function () {
             StockManage['stockMap'].clear()
             StockManage['minPrice'] = 0;
             Deposit.payout();
-            CreateOutputText['textList'] = [];
+            CreateOutputText['outputTextList'] = [];
     })
     describe('constructor', function () {
         it('シングルトンクラスとしてインスタンスがexportされている', function () {
@@ -76,16 +76,16 @@ describe('VendingMachine', function () {
             let text = 'test1が買えました。現在の預かり金は50円です。\n\n毎度ありがとうございました。お釣り50円を返金します。';
             expect(console.log).toHaveBeenCalledWith(CreateOutputText.outputText(text));
         });
-        it('正常パターン（残金で追加購入可能）。在庫を一つ減らす：お釣り払い出しなし：メッセージをCreateOutputTextのtextListに格納：Trueを返却', function () {
+        it('正常パターン（残金で追加購入可能）。在庫を一つ減らす：お釣り払い出しなし：メッセージをCreateOutputTextのoutputTextListに格納：Trueを返却', function () {
             const ordertext = 'test1:500';
             StockManage.addStock('test1', 100, 2);
             expect(VendingMachine.buy(ordertext)).toBeTruthy();
             expect(StockManage['stockMap'].get(StockManage.getItem('test1'))).toBe(1);
             expect(Deposit.getDeposit()).toBe(400); // お釣り払い出しなし
             let expectList = [`test1が買えました。現在の預かり金は400円です。`];
-            expect(CreateOutputText['textList']).toEqual(expectList);
+            expect(CreateOutputText['outputTextList']).toEqual(expectList);
         });
-        it('在庫がないかつ残金で追加購入可能な場合。在庫変化なし：お釣り払い出しなし：メッセージをCreateOutputTextのtextListに格納：Trueを返却', function () {
+        it('在庫がないかつ残金で追加購入可能な場合。在庫変化なし：お釣り払い出しなし：メッセージをCreateOutputTextのoutputTextListに格納：Trueを返却', function () {
             const ordertext = 'test1:100';
             StockManage.addStock('test1', 100, 1);
             StockManage.decrementStockMap(StockManage.getItem('test1')); // 在庫を0に
@@ -93,9 +93,9 @@ describe('VendingMachine', function () {
             expect(StockManage['stockMap'].get(StockManage.getItem('test1'))).toBe(0); // 在庫変化なし
             expect(Deposit.getDeposit()).toBe(100); // お釣り払い出しなし
             let expectList = [`test1は売り切れです。現在の預かり金は100円です。`];
-            expect(CreateOutputText['textList']).toEqual(expectList);
+            expect(CreateOutputText['outputTextList']).toEqual(expectList);
         });
-        it('投入金額が商品の価格を下回る場合、在庫変化なし：お釣り払い出し：メッセージをメッセージをCreateOutputTextのtextListに格納：Falseを返却', function () {
+        it('投入金額が商品の価格を下回る場合、在庫変化なし：お釣り払い出し：メッセージをメッセージをCreateOutputTextのoutputTextListに格納：Falseを返却', function () {
             const ordertext = 'test:50';
             StockManage.addStock('test', 100, 1);
 

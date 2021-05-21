@@ -1,6 +1,6 @@
-import StockManage from '../StockManage';
-import {Item} from '../Item';
-import expectedStockManage from '../StockManage';
+import StockManage from '../src/classes/StockManage';
+import {Item} from '../src/classes/Item';
+import expectedStockManage from '../src/classes/StockManage';
 
 describe('StockManage', function () {
     beforeEach(() => {

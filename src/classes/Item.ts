@@ -1,9 +1,10 @@
 export class Item {
 
     private name: string;
-    private price: number; // TODO : 大文字小文字の違い
 
-    constructor(name: string, price: number) {
+    private price: number;
+
+    public constructor(name: string, price: number) {
         this.name = name;
         this.price = price;
     }

@@ -1,15 +1,15 @@
-import CreateOutputText from './CreateOutputText'; //TODO:requireだとanyになる
+import CreateOutputText = require('../classes/CreateOutputText');
 import StockManage from './StockManage';
 import Deposit from './Deposit';
-import {Item} from './Item';
-import utils from '../public/libs/utils';
+import type {Item} from './Item';
+import {Utils} from '../public/libs/utils';
 
 // 自動販売機
 class VendingMachine {
-    private isPaid: boolean;
+    private deposit: number;
 
-    constructor() {
-        this.isPaid = false;
+    public constructor() {
+        this.deposit = 0;
     }
 
     // 商品一覧を表示する
@@ -29,16 +29,19 @@ class VendingMachine {
 
     // 購入処理
     public buy(order: string): boolean {
-
         if (order.toLowerCase() !== 'n') { // 購入取りやめではない場合
             // 注文情報取得
-            const elements: string[] = utils.decomposition(order, ':');
+            const elements: Array<string> = Utils.decomposition(order, ':');
+
             const inputItemName = elements[0];
+
             const inputPayment = Number(elements[1]);
 
+            const ORDER_ELEMENT_NUM = 2;
+
             // フォーマットチェック
-            if (elements.length != 2 || isNaN(inputPayment)) {
-                this.showDisplay(`入力ミスがあります。下記フォーマットで入力してください。\n商品名：投入金額(単位なし)`);
+            if (elements.length != ORDER_ELEMENT_NUM || isNaN(inputPayment)) {
+                this.showDisplay('入力ミスがあります。下記フォーマットで入力してください。\n商品名：投入金額(単位なし)');
                 return true; // 購入処理は行わず終了（再度購入可能状態）
             }
 
@@ -49,13 +52,16 @@ class VendingMachine {
                 // 料金投入
                 Deposit.addDeposit(inputPayment);
 
+                // バックアップ
+                this.deposit = Deposit.getDeposit();
+
                 // 1/10の確率で支払いなし
-                if (utils.randomNumFloor(10) === 0) {
+                const RAMDOM_MAX_NUM = 10;
+                if (Utils.randomNumFloor(RAMDOM_MAX_NUM) === 0) {
                     CreateOutputText.addText(`おめでとうございます！${inputItemName}を無料でプレゼントします！`);
                 } else {
                     // 残金から購入金額を差し引く
                     Deposit.pay(item.getPrice());
-                    this.isPaid = true;
                 }
 
                 // 在庫をひとつ減らす
@@ -64,12 +70,9 @@ class VendingMachine {
                 // 購入処理完了
                 CreateOutputText.addText(`${inputItemName}が買えました。現在の預かり金は${Deposit.getDeposit()}円です。`);
             }catch(err){
-                if (this.isPaid) {// 商品の代金を支払済なら返金する
-                    const item: Item = StockManage.getItem(inputItemName);
-                    Deposit.addDeposit(item.getPrice());
-                    this.isPaid = false;
-                }
-                CreateOutputText.addText(`${err}現在の預かり金は${Deposit.getDeposit()}円です。`);
+                // 支払いキャンセル
+                Deposit.addDeposit(this.deposit - Deposit.getDeposit()); // 支払済の場合は払い戻す
+                CreateOutputText.addText(`${String(err)}現在の預かり金は${Deposit.getDeposit()}円です。`); //no-useless-catch
             }
 
             //  追加購入可能な状態か判定(最小金額が0は商品がひとつもない状態)
@@ -84,11 +87,7 @@ class VendingMachine {
 
     // 商品を補充する
     public addStock(name: string, price: number, stockNum: number): void {
-        try{
-            StockManage.addStock(name, price, stockNum);
-        } catch(err) {
-            throw err;
-        }
+        StockManage.addStock(name, price, stockNum);
     }
 
     // 画面に表示する

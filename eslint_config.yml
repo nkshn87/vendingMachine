@@ -1,0 +1,656 @@
+
+#############
+# recomended
+#############
+
+### 自動整形
+  'no-extra-semi': 'off'
+  '@typescript-eslint/no-extra-semi': 'error' # セミコロンを2つ連続して記載すると自動整形
+  '@typescript-eslint/no-inferrable-types': 'error' # 不要な型注釈を自動削除
+  '@typescript-eslint/prefer-as-const': 'error'
+  '@typescript-eslint/prefer-namespace-keyword': 'error' # modeleで記載するとnamespaceに自動変換
+        # module foo {}
+        # => namespace foo {}
+
+        # declare module foo {}
+        # => declare namespace foo {}
+
+### 構文チェック
+  '@typescript-eslint/no-unused-vars': 'warn' # 未使用の変数、または、未使用のまま上書きされている変数がある場合に警告
+  '@typescript-eslint/adjacent-overload-signatures': 'error' # オーバーロードのメンバーの編成方法を標準化する
+  '@typescript-eslint/ban-ts-comment': 'error' # コード内にコメントでのルールの設定をしていた場合エラー
+      # interface Options {
+      #   'ts-expect-error'?: boolean | 'allow-with-description';
+      #   'ts-ignore'?: boolean | 'allow-with-description';
+      #   'ts-nocheck'?: boolean | 'allow-with-description';
+      #   'ts-check'?: boolean | 'allow-with-description';
+      #   minimumDescriptionLength?: number;
+      # }
+
+      # const defaultOptions: Options = {
+      #   'ts-expect-error': 'allow-with-description',
+      #   'ts-ignore': true,
+      #   'ts-nocheck': true,
+      #   'ts-check': false,
+      #   minimumDescriptionLength: 3,
+      # };
+
+      # if (false) {
+      #   # @ts-expect-error: Unreachable code error
+      #   console.log('hello');
+      # }
+  '@typescript-eslint/ban-types': 'error' # 特定のタイプを禁止 # TODO
+  '@typescript-eslint/explicit-module-boundary-types': 'warn' # 関数やクラスをexportする時に戻り値の型を明記していない場合に警告
+      # NG
+      # export var arrowFn = (arg): string => `test ${arg}`;
+      # export var arrowFn = (arg: any): string => `test ${arg}`;
+  'no-array-constructor': 'off'
+  '@typescript-eslint/no-array-constructor': 'error' # ??
+  'no-empty-function': 'off'
+  '@typescript-eslint/no-explicit-any': 'warn' # 明示的なanyの記載を警告
+  '@typescript-eslint/no-misused-new': 'error' # クラス内でのnew、interface内でのconstructorを禁止　調査必要
+      # 
+      # class C {
+      #   new(): C;
+      # }
+
+      # interface I {
+      #   new (): I;
+      #   constructor(): void;
+      # }
+  '@typescript-eslint/no-namespace': 'error' # moduleやnamespaceを使用するとエラー
+  '@typescript-eslint/no-non-null-assertion': 'warn' # non null assertion「!」を禁止する const bar = foo!.bar;　non-nullであるということをコンパイラに明示する
+  '@typescript-eslint/no-extra-non-null-assertion': 'error' # 連続したnon null assertion「!!!」を禁止する
+    # NG
+    # const foo: { bar: number } | null = null;
+    # const bar = foo!!!.bar;
+  '@typescript-eslint/no-non-null-asserted-optional-chain': 'error'
+  '@typescript-eslint/no-this-alias': 'error' # thisのエイリアスを使用するとエラー（callbackの中でthisを見れない時にエイリアス使いたい。アロー関数にすればcallbackの中でもthis見れる）
+  'no-unused-vars': 'off'
+  '@typescript-eslint/no-var-requires': 'error' # const a = require('...')を禁止。import a require('...')は許可
+  '@typescript-eslint/triple-slash-reference': 'error' # トリプルスラッシュ・ディレクティブを使用するとエラー（公式非推奨：import推奨）
+
+  # 不要
+  # '@typescript-eslint/no-empty-function': 'error' # 空の関数を検出しエラー スケルトン
+  # '@typescript-eslint/no-empty-interface': 'error' # 空のinterfaceを検出しエラー スケルトン
+
+#####################################
+#recommended-requiring-type-checking
+#####################################
+
+  '@typescript-eslint/await-thenable': 'error' # asyncのつけ忘れtチェック？　「Thenable」ではない値（Promiseなどのメソッドを持つオブジェクト）を待つことを許可しない。
+  '@typescript-eslint/no-floating-promises': 'error' # promiseのエラーを適切に処理していないとエラー（thenやcatchを使っていないなど）
+  '@typescript-eslint/no-for-in-array': 'error' # 配列のforループでinを使うとエラー　//TODO:
+  'no-implied-eval': 'off'
+  '@typescript-eslint/no-implied-eval': 'error' # 暗黙のevalを禁止　=> setTimeout('alert('Hi!');', 100);
+  '@typescript-eslint/no-misused-promises': 'error' # TypeScriptコンパイラで許可されているが、適切に処理されない場所でのPromiseの使用を禁止
+  '@typescript-eslint/no-unnecessary-type-assertion': 'error' # ??不要なタイプアサーションを検出
+  '@typescript-eslint/no-unsafe-assignment': 'error' # 変数や配列の型に関してany型を許可しない
+  '@typescript-eslint/no-unsafe-call': 'error' # any型の変数の呼び出しを許可しない
+  '@typescript-eslint/no-unsafe-member-access': 'error' # anyとして入力された変数へのメンバーアクセスを許可しない
+  '@typescript-eslint/no-unsafe-return': 'error' # 関数からanyまたはany []を返すことを許可しない
+  '@typescript-eslint/prefer-regexp-exec': 'error' #
+  'require-await': 'off'
+  '@typescript-eslint/require-await': 'error' # awaitを使用していないasyncを検知しエラー
+  '@typescript-eslint/restrict-plus-operands': ['error', {'checkCompoundAssignments': true}] # 暗黙変換の足し算を検知しエラー 「+=」の場合も同様に検知
+  '@typescript-eslint/restrict-template-expressions': 'error' # テンプレート文字列内の変数に、オブジェクト型やリスト型、boolean型、any型、nullやundefinedの可能性がある変数が使用されていた場合エラー
+        # const defaults = {
+        #   allowNumber: true,
+        #   allowBoolean: false,
+        #   allowAny: false,
+        #   allowNullish: false,
+        # };
+  '@typescript-eslint/unbound-method': 'error'
+
+
+#############
+# Other than
+#############
+
+### コードの自動整形
+  # prettier入れるので不要
+  '@typescript-eslint/quotes': [ 'error','single' ]
+  '@typescript-eslint/semi': 'error'
+  '@typescript-eslint/indent': ['error', 4] # space:4
+  '@typescript-eslint/space-infix-ops': 'error' # 演算子前後のスペース必須
+  '@typescript-eslint/comma-spacing': 'error' # カンマの後スペース必須
+  '@typescript-eslint/type-annotation-spacing': 'error' # タイプアノテーションのコロンの後にスペース必須
+  '@typescript-eslint/space-before-function-paren': [ 'error', 'never' ] # 関数名と括弧の間のスペース禁止
+  '@typescript-eslint/comma-dangle': ["error", "always-multiline"] # 列挙の最後の項目後のカンマ、複数行の場合のみ必要 diffを見やすくするため
+      # 'comma-dangle': ['error', {
+      #     'arrays': 'never',　'objects': 'never',　'imports': 'never',　'exports': 'never',　'functions': 'never'
+      # }]
+      # 'never'：常にカンマ不要
+      # 'always'：常にカンマ必要
+      # 'always-multiline'：複数行に改行されている場合のみカンマ必要
+      # 'only-multiline'；複数行の場合に許可（強制はしない）
+
+      #  [1,2,3,]
+      # [
+      #     1
+      #     2
+      #     3
+      # ]
+  '@typescript-eslint/brace-style': 'error' # 関数やenumなどの波括弧のスタイル
+  '@typescript-eslint/keyword-spacing': 'error' # 波括弧の前後のスペースを指定  => 前後 改行する場合は？
+  '@typescript-eslint/object-curly-spacing': 'error' # 波括弧の内側にスペースがないとエラー
+  'no-extra-parens': 'off'
+  '@typescript-eslint/no-extra-parens': 'error' # 不要な括弧を検知
+  '@typescript-eslint/lines-between-class-members': 'error' # クラスメンバー間に空行がない場合に１行差し込む
+          # class Foo{
+          #     bar(){} # single line class member
+
+          #     baz(){
+                  # multi line class member
+          #     }
+
+          #     qux(){}
+          # }
+  '@typescript-eslint/member-delimiter-style': [ 'error', { # interfacesとtypeのメンバーの区切り文字設定
+    "multiline": { "delimiter": "comma", "requireLast": true },
+    "singleline": { "delimiter": "comma", "requireLast": false }
+    }]
+        # interface BaseConfig {
+        #     multiline?: {
+        #       delimiter?: 'none' | 'semi' | 'comma';
+        #       requireLast?: boolean;
+        #     };
+        #     singleline?: {
+        #       delimiter?: 'semi' | 'comma';
+        #       requireLast?: boolean;
+        #     };
+        #   }
+
+        # interface Foo {
+        #     name: string
+        #     greet(): void
+        # }
+  'brace-style': 'off'
+  'keyword-spacing': 'off'
+  'object-curly-spacing': 'off'
+  semi: 'off'
+  quotes: 'off'
+  indent: 'off'
+  'comma-spacing': 'off'
+  'lines-between-class-members': 'off'
+
+  # prettier非対応のため必要
+  '@typescript-eslint/consistent-type-imports': [ 'error', { 'prefer': 'type-imports' } ]
+  '@typescript-eslint/array-type': [ 'error', { 'default': 'generic' } ] # const x: Array<string> = ['a', 'b']; const y: ReadonlyArray<string> = ['a', 'b'];
+      # コードベース内の配列タイプの使用法を標準化 array string[] / generic Array<string> / array-simple 型の種類が一種類ならstring[] 複数ならArray<string>
+      # => generic Array<string>
+      # array
+      # const x: string[] = ['a', 'b'];
+      # const y: readonly string[] = ['a', 'b'];
+      # generic
+      # const x: Array<string> = ['a', 'b'];
+      # const y: ReadonlyArray<string> = ['a', 'b'];
+  '@typescript-eslint/naming-convention': 'error' # 変数の命名規則
+        # グループ単位でルール決め可能。個別でも可能。
+        # variableLike - matches the same as variable, function and parameter.
+        # memberLike - matches the same as property, parameterProperty, method, accessor, enumMember.
+        # typeLike - matches the same as class, interface, typeAlias, enum, typeParameter.
+        # property - matches the same as classProperty, objectLiteralProperty, typeProperty.
+        # method - matches the same as classMethod, objectLiteralMethod, typeMethod.
+
+        # 種類
+        # | 'camelCase'
+        # | 'strictCamelCase'
+        # | 'PascalCase'
+        # | 'StrictPascalCase'
+        # | 'snake_case'
+        # | 'UPPER_CASE'
+
+        # アンダースコアの位置
+        # leadingUnderscore 前方のアンダースコア
+        # trailingUnderscore 後方のアンダースコア
+
+        # 種類
+        # | 'forbid' # 許可しない
+        # | 'require' # 強制
+        # | 'requireDouble' # ２つ強制
+        # | 'allow' # 1つ許可（なくてもいい。2つは許可しない）
+        # | 'allowDouble' # 2つ許可（なくてもいい。１つは許可しない）
+        # | 'allowSingleOrDouble'; 両方許可（なくてもいい）
+
+
+### 構文チェック
+  '@typescript-eslint/switch-exhaustiveness-check': 'error' # switch caseに漏れあればエラー
+        # type Day =
+        #   | 'Monday'
+        #   | 'Tuesday'
+        #   | 'Wednesday'
+        #   | 'Thursday'
+        #   | 'Friday'
+        #   | 'Saturday'
+        #   | 'Sunday';
+
+        # const day = 'Monday' as Day;
+        # let result = 0;
+
+        # switch (day) {
+        #   case 'Monday': {
+        #     result = 1;
+        #     break;
+        #   }
+        # }
+        # => Switch is not exhaustive. Cases not matched: "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday"
+  '@typescript-eslint/no-throw-literal': 'error' # リテラルをスローするとエラー
+  '@typescript-eslint/no-shadow': 'error' # upper scopeで既に定義している変数と同じ名前の変数を関数内で定義するとエラー TODO：オーバーロードが通るか確認
+          # interface Options extends BaseNoShadowOptions {
+          #   ignoreTypeValueShadow?: boolean;
+          #   ignoreFunctionTypeParameterNameValueShadow?: boolean;
+          # }
+
+          # const defaultOptions: Options = {
+          #   ...baseNoShadowDefaultOptions,
+          #   ignoreTypeValueShadow: true,
+          #   ignoreFunctionTypeParameterNameValueShadow: true,
+          # };
+  '@typescript-eslint/no-redeclare': 'error' # 同じ変数名で再宣言を許可しない varを禁止できればいいけどそんなルールはなさそう
+        # NG
+        # var a = 3;
+        # var a = 10;
+  '@typescript-eslint/no-require-imports': 'error' # requireを使用したimportを許可しない requireで対応できる方法がわかるまで
+  '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error' # boolean型の変数をbooleanと比較するとエラー　（if(isNum === true) ...）
+  '@typescript-eslint/no-unnecessary-condition': 'error'  # 絶対trueまたはfalseにならない判定があればエラー
+        # function head<T>(items: T[]) {
+        #   if (items) {
+        #     return items[0].toUpperCase();
+        #   }
+        # }
+
+        # function foo(arg: 'bar' | 'baz') {
+        #   if (arg) {
+        #   }
+        # }
+
+        # allowConstantLoopConditions
+        # while (true) {}
+        # for (; true; ) {}
+        # do {} while (true);
+
+        # type Options = {
+        #   allowConstantLoopConditions?: boolean;
+        #   allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing?: boolean;
+        # };
+
+        # const defaultOptions: Options = {
+        #   allowConstantLoopConditions: false,
+        #   allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: false,
+        # };
+        # サーバー側ではやってはいけないpythonならOK
+  '@typescript-eslint/no-unsafe-argument': 'error' # 関数を呼び出す時に、any型の引数の設定を許可しない
+        # NG
+        # const anyArray: any[] = [];
+        # foo(...anyArray);
+  '@typescript-eslint/no-unused-expressions': 'warn' # 未使用の式を許可しない スケルトンの時に不便
+        # if(0) 0
+
+        # {0}
+
+        # f(0), {}
+
+        # a && b()
+
+        # a, b()
+
+        # c = a, b;
+  '@typescript-eslint/prefer-includes': 'error' # indexOfをincludesに置換できる場合にエラー
+        # str.indexOf(value) !== -1;
+        # array.indexOf(value) !== -1;
+  '@typescript-eslint/prefer-literal-enum-member': 'warn' # enumのメンバーにリテラル以外を使用していた場合エラー
+        # const str = 'Test';
+        # enum Invalid {
+        #   A = str, // Variable assignment
+        #   B = {}, // Object assignment
+        #   C = `A template literal string`, // Template literal
+        #   D = new Set(1, 2, 3), // Constructor in assignment
+        #   E = 2 + 2, // Expression assignment
+        # }
+  '@typescript-eslint/prefer-string-starts-ends-with': 'error' # startsWith, endsWithに置換できる処理がある場合エラー
+          # starts with
+          # foo[0] === 'b';
+          # foo.charAt(0) === 'b';
+          # foo.indexOf('bar') === 0;
+          # foo.slice(0, 3) === 'bar';
+          # foo.substring(0, 3) === 'bar';
+          # foo.match(/^bar/) != null;
+          # /^bar/.test(foo);
+
+          # ends with
+          # foo[foo.length - 1] === 'b';
+          # foo.charAt(foo.length - 1) === 'b';
+          # foo.lastIndexOf('bar') === foo.length - 3;
+          # foo.slice(-3) === 'bar';
+          # foo.substring(foo.length - 3) === 'bar';
+          # foo.match(/bar$/) != null;
+          # /bar$/.test(foo);
+  '@typescript-eslint/prefer-ts-expect-error': 'error' # @ts-ignoresを使っていた場合にエラー。@ts-expect-errorを促す（TypeScript3.9からサポート）
+          # @ts-ignoreの用途
+          # 古いJSコードを置き換える状況で
+          # 間違っているのはわかっていても通したい時に使う
+          # コードを書き換えてしまうのは、思わぬバグを誘発するので悪手になりがち
+
+          # /** @ts-ignore */
+          # const block = 1; => 正常であってもエラーであっても無視する。@ts-ignoresは実際にエラーが発生しているかどうかはわからない
+
+          # /** @ts-expect-error */
+          # const block = 1; => 正常な場合にエラー
+  '@typescript-eslint/no-parameter-properties': 'error' # コンストラクタの引数でプロパティの使用していいか指定 readonly private protected public
+          # class Foo {
+          #   constructor(readonly name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(private name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(protected name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(public name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(private readonly name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(protected readonly name: string) {}
+          # }
+
+          # class Foo {
+          #   constructor(public readonly name: string) {}
+          # }
+  '@typescript-eslint/consistent-type-assertions': ['error', {'assertionStyle': 'never'}] # タイプアサーションを許可しない
+            # タイプアサーションはTypeScriptが推論、分析された型は、任意の方法で上書きすること。
+            # => 危険
+            # interface Foo {
+            #     bar: number;
+            #     bas: string;
+            # }
+            # var foo = {} as Foo;
+            # foo.bar = 123;
+            #　basを追加し忘れてもエラーにならない => 必要なプロパティを実際に追加するのを忘れても、コンパイラが守ってくれない
+            #
+            # var foo: Foo = {bar: 1}   => こうすると、basが足りないことをエラーで教えてくれる
+            #
+            # https://typescript-jp.gitbook.io/deep-dive/type-system/type-assertion
+
+            # type Options =
+            # | {
+            #     assertionStyle: 'as' | 'angle-bracket';
+            #     objectLiteralTypeAssertions: 'allow' | 'allow-as-parameter' | 'never';
+            #   }
+            # | {
+            #     assertionStyle: 'never';
+            #   };
+  '@typescript-eslint/require-array-sort-compare': 'warning' # compare引数を指定せずにArray＃sort（）メソッドを呼び出さないようにする。
+          # sortメソッドは要素を文字列に変換してから、UTF-16 コード単位の値の並びとして比較
+          # なので次のようになる
+          # [1、2、3、10、20、30].sort()
+          # →[1、10、2、20、3、30]
+  '@typescript-eslint/no-dupe-class-members': 'error' # 同じ名前のクラスメンバーを検出 TODO:オーバーロードの時は？？
+          # class Foo {
+          #   bar() { }
+          #   bar() { }
+          # }
+
+          # class Foo {
+          #   bar() { }
+          #   get bar() { }
+          # }
+
+          # class Foo {
+          #   static bar() { }
+          #   static bar() { }
+        # }
+  '@typescript-eslint/no-duplicate-imports': 'error' # 同じファイルからのimportを分けて書いているとエラー
+          # import { merge } from 'module';
+          # import something from 'another-module';
+          # import { find } from 'module';
+  '@typescript-eslint/no-invalid-void-type': 'error' # 戻り型またはジェネリック型引数以外でのvoid型の使用を禁止
+          # type PossibleValues = string | number | void;
+          # type MorePossibleValues = string | ((number & any) | (string | void));
+
+          # function logSomething(thing: void) {}
+          # function printArg<T = void>(arg: T) {}
+
+          # interface Interface {
+          #   lambda: () => void;
+          #   prop: void;
+          # }
+
+          # class MyClass {
+          #   private readonly propName: void;
+          # }
+  '@typescript-eslint/no-loop-func': 'error' # 安全でない参照を含むループ内の関数を許可しません（たとえば、外部スコープの上書き可能な変数の参照(var, let)）
+          # let foo = 0;
+          # for (let i = 0; i < 10; ++i) {
+          #     setTimeout(() => console.log(foo), 3000);
+          #     foo += 1;
+          # } => 10,10,10,,,,
+  '@typescript-eslint/explicit-function-return-type': 'error' # 関数の戻り値の型指定が必須
+  '@typescript-eslint/explicit-member-accessibility': 'error' # アクセス修飾子を指定が必須
+  '@typescript-eslint/strict-boolean-expressions': ['error', { # boolean型が予測される式(if文の条件句)でboolean型以外の使用を禁止 デフォルトで、string型とnumber型とオブジェクト型は許可されているため禁止にする
+      'allowString': false,
+      'allowNumber': false,
+      'allowNullableObject': false
+    }]
+      #  let obj = {}; if(obj) ...
+        # function foo(bool?: boolean) {
+        #   if (bool) {
+        #     bar();
+        #   }
+        # }
+        # let str: string | null = null;
+        # if (!str) {
+        #   console.log('str is empty');
+        # }
+
+        # type Options = {
+        #   allowString?: boolean;
+        #   allowNumber?: boolean;
+        #   allowNullableObject?: boolean;
+        #   allowNullableBoolean?: boolean;
+        #   allowNullableString?: boolean;
+        #   allowNullableNumber?: boolean;
+        #   allowAny?: boolean;
+        # };
+        # const defaultOptions: Options = {
+        #   allowString: true,
+        #   allowNumber: true,
+        #   allowNullableObject: true,
+        #   allowNullableBoolean: false,
+        #   allowNullableString: false,
+        #   allowNullableNumber: false,
+        #   allowAny: false,
+        #   allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: false,
+        # };
+  '@typescript-eslint/no-magic-numbers': ['error', { 'ignoreEnums': true, 'ignore': [0, 1] }] # プティミティブ形を定義せず使用するとエラー
+
+  # 不要（ひろきさんと相談し不要と判断）
+  '@typescript-eslint/no-unnecessary-qualifier': 'error' # namespace、enumの不要な修飾子があればエラー
+        # namespace A {
+        #   export type B = number;
+        #   const x: A.B = 3;
+        # }
+  '@typescript-eslint/no-use-before-define': 'error' # 定義前の識別子の使用を検出
+        # alert(a);
+        # var a = 10;
+
+        # f();
+        # function f() {}
+  '@typescript-eslint/prefer-enum-initializers': 'error' # enumの仕様で、明示的にあたいが設定されない場合にintを設定するが、それを検知しエラー
+        # enum Status {
+        #   Open, // infer 0
+        #   Closed, // infer 1
+        # }
+  '@typescript-eslint/prefer-for-of': 'error' # for-ofループが使える処理で使っていなかった場合にエラー
+        # for (let i = 0; i < arr.length; i++) {
+        #   console.log(arr[i]);
+        # }
+  '@typescript-eslint/prefer-nullish-coalescing': 'error' # TypeScript3.7からサポートされている「??」（nullまたはundefined）の許可、または制限
+          # undefined と null の確認しかしないので「||」これより安全
+          # function myFunc(foo: string | null) {
+          #   return foo ?? 'a string';
+          # }
+
+          # function myFunc(foo: string | null) {
+          #   return foo !== null && foo !== undefined ? foo : 'a string';
+          # }
+          # https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/prefer-nullish-coalescing.md
+  '@typescript-eslint/unified-signatures': 'error' # オーバーロードで変数分けて定義せずに、unionに置き換えられる箇所を検知
+          # function f(x: number): void;
+          # function f(x: string): void;
+          # f(): void;
+          # f(...x: number[]): void;
+
+          # function f(x: number | string): void;
+          # function f(x?: ...number[]): void;
+  '@typescript-eslint/no-type-alias': 'error' # type aliasの定義についてのルール決め （プリミティブはNG、ユニオンならOKなど） TODO:とりあえずOKであとで必要に応じて
+          # type Foo = 'a';
+          # type Foo = 'a' | 'b';
+          # type Foo = string;
+          # https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-type-alias.md
+  '@typescript-eslint/consistent-indexed-object-style': 'error' # tsのindex signatureのルール設定 TODO:使い分けたい（Recordはなし）
+          # interface Foo {
+          #   [key: string]: unknown;
+          # }
+          # type Foo = {
+          #   [key: string]: unknown;
+          # };
+          # type Foo = Record<string, unknown>;
+  '@typescript-eslint/consistent-type-definitions': ["error", "type"] # オブジェクトでの型定義をinterfaceで書くかtypeで書くか指定する 追加調査　TODO:使い分けたい（Recordはなし）
+          # interface vs type
+          # typeが良さそう
+          # ①定義できる型の種類
+          # interfaceではオブジェクトとクラスの型だけ定義できますが、typeでは他の型も参照できます。
+          # ②interfaceは拡張ができ、勝手に拡張されるリスク
+
+          #   size: number;
+          #   color: string;
+          # }
+
+          # interface Shoes {
+          #   isSecondhand: boolean;
+          # }　=> これがエラーなくどこにもかけてしまう
+
+          # const heel: Shoes = {
+          #   size: 235,
+          #   color: "red"
+          # }; => これがプロパティ不足でエラーになる
+  '@typescript-eslint/sort-type-union-intersection-members': 'error'
+        # 「|」や「&」で複数typeを定義している場合（union）アルファベット順に並べ替える
+  '@typescript-eslint/no-unnecessary-type-constraint': 'error' # 不要なタイプパラメータへのextendsを検出　interface FooAny<T extends any> {}
+        # interface FooAny<T extends any> {}
+        # interface FooUnknown<T extends unknown> {}
+  '@typescript-eslint/prefer-optional-chain': 'error' # TypeScript 3.7からサポートされている、オプションのチェーン演算子(foo?.a?.b?.c)の許可、または制限
+  '@typescript-eslint/no-implicit-any-catch': 'error' # catchの引数に明示的にunknownと書かないとエラー
+  '@typescript-eslint/ban-tslint-comment': 'error' # TSLintからESLintに移行するときに便利 TSLintが削除されると、このルールはTSLintアノテーションの検索に役立つ
+  'default-param-last': 'off'
+  '@typescript-eslint/default-param-last': 'error' # 関数の引数のうち、デフォルト値を設定する引数は最後に書く
+  'dot-notation': 'off'
+  '@typescript-eslint/dot-notation': 'error' # オブジェクトのvalueの呼び出し方の指定　foo['bar'] / foo.bar 右に寄せたいけどキーが可変の場合
+  'func-call-spacing': 'off'
+  '@typescript-eslint/func-call-spacing': 'error' # 関数名と括弧の間のスペース
+  'init-declarations': 'off'
+  '@typescript-eslint/init-declarations': 'error' # 変数定義の際に初期値の設定を強制するか ※型指定は強制
+  'no-useless-constructor': 'off'
+  '@typescript-eslint/no-useless-constructor': 'error' # 未使用のコンストラクターを許可しない
+  'no-use-before-define': 'off'
+  # non null assertion　を使用不可とすることになったため不要
+    '@typescript-eslint/non-nullable-type-assertion-style': 'error' # asキャストの代わりに「!」で書ける場合にエラー
+    '@typescript-eslint/no-confusing-non-null-assertion': 'error' # a! == b; <= これを禁止するか
+
+
+### typescript-eslintと重複しているeslintのルールを無効化
+    'no-magic-numbers': 'off'
+    'no-throw-literal': 'off'
+    'no-unused-expressions': 'off'
+    'no-shadow': 'off'
+    'no-redeclare': 'off'
+    'no-dupe-class-members': 'off'
+    'no-duplicate-imports': 'off'
+    'no-loop-func': 'off'
+
+
+
+
+
+
+
+
+
+
+
+### 追加調査
+
+# '@typescript-eslint/prefer-readonly-parameter-types': 'error' # readonlyを明記しないとエラー　TODO：公式の見解次第
+        # private wrap(textList: readonly string[]): string {
+          # readonly string[] => OK   readonly Array<string> => NG
+          # こちらのルールを採用するなら
+          # '@typescript-eslint/array-type': [ 'error', 'generic' ]の設定を変更する必要がある
+
+
+
+  '@typescript-eslint/class-literal-property-style': 'error' # fields getters クラスによって公開されるリテラルが、2つのスタイルのいずれかで一貫して実行されるようにする
+          # https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/class-literal-property-style.md
+  'no-invalid-this': 'off'
+  '@typescript-eslint/no-invalid-this': 'error' # クラスまたはクラスlikeなオブジェクトの外部でのthis使うとエラー
+  '@typescript-eslint/member-ordering': 'error' # クラス宣言、クラス式、インターフェイス、および型リテラルの構造化と順序付けの方法を標準化  signature', 'method', 'constructor', 'field
+  '@typescript-eslint/method-signature-style': 'error' # オブジェクトインターフェースの記載方法指定 method / property
+      # method shorthand syntax
+      # interface T1 {
+      #     func(arg: string): number;
+      # }
+      # regular property with function type
+      # interface T2 {
+      #     func: (arg: string) => number;
+      # }
+  'no-return-await': 'off'
+  '@typescript-eslint/return-await': 'error' # awaitを直接returnしていた場合にエラー　return await bar();
+  '@typescript-eslint/no-base-to-string': 'error' # 誤ってベースのObject .toString（）メソッドをデフォルトにすることを防ぐ
+  '@typescript-eslint/no-confusing-void-expression': 'error' # 戻り値を返却するか紛らわしい記載を検出？
+  '@typescript-eslint/no-dynamic-delete': 'error' # 危険な削除を検知　ok : delete container.aaa / delete container[7];  NG: delete container['aaa']; / const name = 'name'; delete container[name];
+  '@typescript-eslint/no-extraneous-class': 'error' # クラスが誤って名前空間として使用された場合にエラー
+  'no-loss-of-precision': 'off'
+  '@typescript-eslint/no-loss-of-precision': 'error'
+  '@typescript-eslint/no-unnecessary-type-arguments': 'error' # ??デフォルトと同じ明示的な型パラメーターを提供することは冗長
+  '@typescript-eslint/prefer-function-type': 'error' # ?? 単一の呼び出しシグネチャを持つインターフェイスまたはオブジェクトタイプリテラルの代わりに関数タイプを使用することを提案
+  '@typescript-eslint/prefer-readonly': 'error' # ?? プライバシープライベートを持つメンバー変数は、宣言クラスの外部で変更することはできません。そのクラスが値を変更しない場合は、読み取り専用として安全にマークできます。
+  '@typescript-eslint/prefer-reduce-type-parameter': 'error' # reduceを使用する際に、明示的にジェネリックパラメータとして渡していない場合にエラー
+  '@typescript-eslint/promise-function-async': 'error' # ??
+
+  # 再現できない
+  '@typescript-eslint/typedef': 'error' # 不要なタイプアノテーションの削除 cosnt a: string = 'text';
+        # type Options = {
+        #   arrayDestructuring?: boolean;
+        #   arrowParameter?: boolean;
+        #   memberVariableDeclaration?: boolean;
+        #   objectDestructuring?: boolean;
+        #   parameter?: boolean;
+        #   propertyDeclaration?: boolean;
+        #   variableDeclaration?: boolean;
+        #   variableDeclarationIgnoreFunction?: boolean;
+        # };
+
+        # const defaultOptions: Options = {
+        #   arrayDestructuring: false,
+        #   arrowParameter: false,
+        #   memberVariableDeclaration: false,
+        #   objectDestructuring: false,
+        #   parameter: false,
+        #   propertyDeclaration: false,
+        #   variableDeclaration: false,
+        #   variableDeclarationIgnoreFunction: false,
+        # };
+
+
+
+
+
+
